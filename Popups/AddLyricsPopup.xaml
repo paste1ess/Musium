@@ -13,5 +13,6 @@
         <TextBlock TextWrapping="Wrap">Adding lyrics <Run FontWeight="ExtraBold">will modify the file.</Run></TextBlock>
         
         <CheckBox x:Name="SessionCheckbox" Content="Only for this session" Checked="SessionCheckbox_Checked" Unchecked="SessionCheckbox_Unchecked"/>
+        <CheckBox x:Name="SyncedCheckbox" Content="Try synced lyrics (will create/modify file)" Checked="SyncedCheckbox_Checked" Unchecked="SyncedCheckbox_Unchecked"/>
     </StackPanel>
 </Page>
