@@ -5,8 +5,10 @@ using Microsoft.UI.Xaml.Data;
 using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
+using Musium.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
@@ -16,37 +18,28 @@ using Windows.Foundation.Collections;
 // To learn more about WinUI, the WinUI project structure,
 // and more about our project templates, see: http://aka.ms/winui-project-info.
 
-namespace Musium.Popups
+namespace Musium.Pages
 {
     /// <summary>
     /// An empty page that can be used on its own or navigated to within a Frame.
     /// </summary>
-    public sealed partial class AddLyricsPopup : Page
+    public sealed partial class Playlists : Page
     {
-        public bool SessionChecked = false;
-        public bool GetSyncedLyrics = false;
-        public AddLyricsPopup()
+        public Playlists()
         {
             InitializeComponent();
+            Loaded += OnLoaded;
         }
 
-        private void SessionCheckbox_Checked(object sender, RoutedEventArgs e)
+        private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            SessionChecked = true;
-        }
-
-        private void SessionCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            SessionChecked = false;
-        }
-        private void SyncedCheckbox_Checked(object sender, RoutedEventArgs e)
-        {
-            GetSyncedLyrics = true;
-        }
-
-        private void SyncedCheckbox_Unchecked(object sender, RoutedEventArgs e)
-        {
-            GetSyncedLyrics = false;
+            var playlist = await Playlist.GetPlaylistFromXSPFFile(new("file://C:\\Users\\jamied\\Documents\\testPlaylist.xspf"));
+            Debug.WriteLine(playlist == null);
+            if (playlist == null) return;
+            foreach (Song song in playlist.Songs)
+            {
+                Debug.WriteLine(song.FilePath);
+            }
         }
     }
 }

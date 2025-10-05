@@ -45,7 +45,14 @@
                     Content="Now Playing"
                     Tag="Musium.Pages.NowPlaying">        
                     <NavigationViewItem.Icon>
-                        <SymbolIcon Symbol="Play" />
+                        <SymbolIcon Symbol="Play"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem 
+                    Content="Playlists"
+                    Tag="Musium.Pages.Playlists">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xF168;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem 
@@ -59,18 +66,18 @@
                     Content="Albums"
                     Tag="Musium.Pages.Albums">
                     <NavigationViewItem.Icon>
-                        <FontIcon Glyph="&#xE93C;" />
+                        <FontIcon Glyph="&#xE93C;"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
                 <NavigationViewItem 
                     Content="Tracks"
                     Tag="Musium.Pages.Tracks">
                     <NavigationViewItem.Icon>
-                        <SymbolIcon Symbol="MusicInfo" />
+                        <SymbolIcon Symbol="MusicInfo"/>
                     </NavigationViewItem.Icon>
                 </NavigationViewItem>
             </NavigationView.MenuItems>
-            <Frame x:Name="RootFrame" />
+            <Frame x:Name="RootFrame"/>
     </NavigationView>
     </Grid>
 </Window>

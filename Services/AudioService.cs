@@ -191,6 +191,25 @@ namespace Musium.Services
             }
             return null;
         }
+        public async Task<Song?> GetSongFromPathAsync(Uri path)
+        {
+            return await Task.Run(() =>
+            {
+                List<Song> songs = new List<Song>();
+                foreach (Artist artist in Database)
+                {
+                    foreach (Album album in artist.Albums)
+                    {
+                        foreach (Song song in album.Songs)
+                        {
+                            if (song.FilePath == path.AbsolutePath) return song;
+                        }
+                    }
+                }
+                return null;
+            });
+
+        }
 
         public async Task<List<Song>> GetAllTracksAsync()
         {
@@ -539,7 +558,7 @@ namespace Musium.Services
             ".aiff",
             ".dsd"
         };
-        public async Task<Song> AddSongFromFile(string path)
+        public async Task<Song?> AddSongFromFile(string path)
         {
             if (!System.IO.File.Exists(path))
             {
@@ -565,7 +584,7 @@ namespace Musium.Services
                 var artist = GetArtistOrCreate(artistName);
                 var album = GetAlbumOrCreate(artist, tfile.Tag.Album);
 
-                var song = ExtractSongData(tfile, path, album);
+                var song = ExtractSongData(tfile, new(path), album);
 
                 return song;
             }
@@ -606,18 +625,18 @@ namespace Musium.Services
             return album;
         }
 
-        private Song ExtractSongData(TagLib.File tfile, string path, Album album)
+        private Song ExtractSongData(TagLib.File tfile, Uri path, Album album)
         {
             var song = new Song
             {
                 Title = tfile.Tag.Title,
                 Album = album,
                 ArtistName = tfile.Tag.FirstPerformer,
-                FilePath = path,
+                FilePath = path.LocalPath,
                 Genre = tfile.Tag.FirstGenre,
                 Duration = tfile.Properties.Duration,
                 TrackNumber = (int)tfile.Tag.Track,
-                Lossless = IsLossless(path)
+                Lossless = IsLossless(path.LocalPath)
             };
             song.Favorited = song.RetrieveFavorited();
             var lyrics = tfile.Tag.Lyrics;
@@ -627,8 +646,8 @@ namespace Musium.Services
             } 
             else
             {
-                var parent = Path.GetDirectoryName(path);
-                var lrcPath = Path.Combine(parent, $"{Path.GetFileNameWithoutExtension(path)}.lrc");
+                var parent = Path.GetDirectoryName(path.LocalPath);
+                var lrcPath = Path.Combine(parent, $"{Path.GetFileNameWithoutExtension(path.LocalPath)}.lrc");
                 if (System.IO.File.Exists(lrcPath))
                 {
                     song.Lyrics = System.IO.File.ReadAllText(lrcPath);
@@ -645,7 +664,7 @@ namespace Musium.Services
             } 
             else
             {
-                var parent = Path.GetDirectoryName(path);
+                var parent = Path.GetDirectoryName(path.LocalPath);
                 var jpgPath = Path.Combine(parent, "cover.jpg");
                 var pngPath = Path.Combine(parent, "cover.png");
                 if (System.IO.File.Exists(pngPath))
