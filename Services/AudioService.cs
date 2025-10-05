@@ -202,7 +202,7 @@ namespace Musium.Services
                     {
                         foreach (Song song in album.Songs)
                         {
-                            if (song.FilePath == path.AbsolutePath) return song;
+                            if (song.FilePath == path.LocalPath) return song;
                         }
                     }
                 }

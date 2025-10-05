@@ -20,9 +20,6 @@ using Windows.Foundation.Collections;
 
 namespace Musium.Pages
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
     public sealed partial class Playlists : Page
     {
         public Playlists()
@@ -34,7 +31,6 @@ namespace Musium.Pages
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             var playlist = await Playlist.GetPlaylistFromXSPFFile(new("file://C:\\Users\\jamied\\Documents\\testPlaylist.xspf"));
-            Debug.WriteLine(playlist == null);
             if (playlist == null) return;
             foreach (Song song in playlist.Songs)
             {

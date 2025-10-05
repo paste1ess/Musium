@@ -52,20 +52,18 @@ namespace Musium.Models
             Playlist playlist = new();
             playlist.Songs = new();
             if (!Path.Exists(uri.LocalPath)) return null;
-            Debug.WriteLine("path exists");
 
             XElement elem = XElement.Load(@$"{uri.LocalPath}");
             if (elem.GetDefaultNamespace() != ns) return null;
-            Debug.WriteLine("correct name space");
 
             var trackList = elem.Element(ns + "trackList");
             if (trackList == null) return null;
-            Debug.WriteLine("trackList elem exists");
 
-            var tracks = trackList.Elements("track");
+            var tracks = trackList.Elements(ns + "track");
+
             foreach (XElement trackElem in tracks)
             {
-                if (trackElem.Element("location") is XElement locationElem)
+                if (trackElem.Element(ns + "location") is XElement locationElem)
                 {
                     string location = locationElem.Value;
                     var song = await Audio.GetSongFromPathAsync(new(location));
