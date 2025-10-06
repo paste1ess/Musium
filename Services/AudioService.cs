@@ -441,6 +441,20 @@ namespace Musium.Services
             }
         }
 
+        private Playlist? _currentViewedPlaylist;
+        public Playlist? CurrentViewedPlaylist
+        {
+            get => _currentViewedPlaylist;
+            set
+            {
+                if (_currentViewedPlaylist != value)
+                {
+                    _currentViewedPlaylist = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public void Pause()
         {
             _mediaPlayer?.Pause();
