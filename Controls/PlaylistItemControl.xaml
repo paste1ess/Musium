@@ -25,7 +25,7 @@
 
 
             <TextBlock x:Name="PlaylistNameText" 
-               Text="{x:Bind Album.Title, Mode=OneWay, TargetNullValue='Missing name, please report this'}"
+               Text="{x:Bind Playlist.Title, Mode=OneWay, TargetNullValue='Missing name, please report this'}"
                TextWrapping="WrapWholeWords"
                FontWeight="Bold"/>
         </StackPanel>

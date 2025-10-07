@@ -61,7 +61,7 @@ public sealed partial class PlaylistItemControl : UserControl, INotifyPropertyCh
     private static async void OnPlaylistChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
     {
         var control = d as PlaylistItemControl;
-        if (control != null && control.Playlist?. is byte[] imageData)
+        if (control != null && control.Playlist?.ImageData is byte[] imageData)
         {
             var stream = new InMemoryRandomAccessStream();
             await stream.WriteAsync(imageData.AsBuffer());
