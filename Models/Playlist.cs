@@ -46,6 +46,17 @@ namespace Musium.Models
                 OnPropertyChanged();
             }
         }
+        private byte[]? _imageData;
+        public byte[]? ImageData
+        {
+            get => _imageData;
+            set
+            {
+                _imageData = value;
+                OnPropertyChanged();
+            }
+        }
+
         private static XNamespace ns = "http://xspf.org/ns/0/";
         public static async Task<Playlist?> GetPlaylistFromXSPFFile(Uri uri)
         {

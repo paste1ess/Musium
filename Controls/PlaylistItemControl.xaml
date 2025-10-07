@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<UserControl
+    x:Class="Musium.Controls.PlaylistItemControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Musium.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <Grid x:Name="LayoutRoot" 
+        Width="176"
+        Padding="8"
+        CornerRadius="8"
+        Background="Transparent">
+
+        <StackPanel Spacing="4">
+
+            <Frame
+                Height="160" 
+                Width="160"
+                CornerRadius="4">
+                <Image x:Name="PlaylistImage" Source="{x:Bind DisplayedCoverArt, Mode=OneWay, TargetNullValue='/Assets/Placeholder.png'}"/>
+            </Frame>
+
+
+            <TextBlock x:Name="PlaylistNameText" 
+               Text="{x:Bind Album.Title, Mode=OneWay, TargetNullValue='Missing name, please report this'}"
+               TextWrapping="WrapWholeWords"
+               FontWeight="Bold"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

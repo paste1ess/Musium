@@ -40,46 +40,43 @@
             IsPaneToggleButtonVisible="False"
             ItemInvoked="rootNav_ItemInvoked"
             IsSettingsVisible="True">
-            <NavigationView.PaneCustomContent>
-                <StackPanel>
-                    <NavigationViewItem 
-                        Content="Now Playing"
-                        Tag="Musium.Pages.NowPlaying">
-                        <NavigationViewItem.Icon>
-                            <SymbolIcon Symbol="Play"/>
-                        </NavigationViewItem.Icon>
-                    </NavigationViewItem>
-                    <NavigationViewItem 
-                        Content="Playlists"
-                        Tag="Musium.Pages.Playlists">
-                        <NavigationViewItem.Icon>
-                            <FontIcon Glyph="&#xF168;"/>
-                        </NavigationViewItem.Icon>
-                    </NavigationViewItem>
-                    <NavigationViewItem 
-                        Content="Favorites"
-                        Tag="Musium.Pages.Favorites">
-                        <NavigationViewItem.Icon>
-                            <FontIcon Glyph="&#xE728;"/>
-                        </NavigationViewItem.Icon>
-                    </NavigationViewItem>
-                    <NavigationViewItem 
-                        Content="Albums"
-                        Tag="Musium.Pages.Albums">
-                        <NavigationViewItem.Icon>
-                            <FontIcon Glyph="&#xE93C;"/>
-                        </NavigationViewItem.Icon>
-                    </NavigationViewItem>
-                    <NavigationViewItem 
-                        Content="Tracks"
-                        Tag="Musium.Pages.Tracks">
-                        <NavigationViewItem.Icon>
-                            <SymbolIcon Symbol="MusicInfo"/>
-                        </NavigationViewItem.Icon>
-                    </NavigationViewItem>
-                    <TextBlock Text="Plop"/>
-                </StackPanel>
-            </NavigationView.PaneCustomContent>
+            <NavigationView.MenuItems>
+                <NavigationViewItem 
+                    Content="Now Playing"
+                    Tag="Musium.Pages.NowPlaying">
+                    <NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Play"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem 
+                    Content="Playlists"
+                    Tag="Musium.Pages.Playlists">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xF168;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem 
+                    Content="Favorites"
+                    Tag="Musium.Pages.Favorites">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE728;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem 
+                    Content="Albums"
+                    Tag="Musium.Pages.Albums">
+                    <NavigationViewItem.Icon>
+                        <FontIcon Glyph="&#xE93C;"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem 
+                    Content="Tracks"
+                    Tag="Musium.Pages.Tracks">
+                    <NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="MusicInfo"/>
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
             <Frame x:Name="RootFrame"/>
             
     </NavigationView>
