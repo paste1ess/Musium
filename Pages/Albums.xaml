@@ -9,18 +9,6 @@
     xmlns:controls="using:Musium.Controls"
     xmlns:models="using:Musium.Models"
     mc:Ignorable="d">
-    <Page.Resources>
-        <Style x:Key="NakedListViewItemStyle" TargetType="ListViewItem">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="ListViewItem">
-                        <ContentPresenter />
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Page.Resources>
-
     <GridView 
         Margin="16" 
         Header="Albums" 

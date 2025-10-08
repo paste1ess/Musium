@@ -70,6 +70,9 @@ namespace Musium.Models
             var trackList = elem.Element(ns + "trackList");
             if (trackList == null) return null;
 
+            var title = elem.Element(ns + "title");
+            playlist.Title = title?.Value ?? Path.GetFileNameWithoutExtension(uri.LocalPath);
+
             var tracks = trackList.Elements(ns + "track");
 
             foreach (XElement trackElem in tracks)

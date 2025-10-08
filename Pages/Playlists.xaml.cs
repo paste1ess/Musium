@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml.Navigation;
 using Musium.Models;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -28,6 +29,7 @@ namespace Musium.Pages
             Loaded += OnLoaded;
         }
 
+        public ObservableCollection<Playlist> AllPlaylists = new();
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             var playlist = await Playlist.GetPlaylistFromXSPFFile(new("file://C:\\Users\\jamied\\Documents\\testPlaylist.xspf"));
@@ -36,6 +38,12 @@ namespace Musium.Pages
             {
                 Debug.WriteLine(song.FilePath);
             }
+            AllPlaylists.Add(playlist);
+        }
+
+        private void GridView_ItemClick(object sender, ItemClickEventArgs e)
+        {
+
         }
     }
 }

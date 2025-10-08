@@ -6,9 +6,21 @@
     xmlns:local="using:Musium.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Musium.Controls"
+    xmlns:models="using:Musium.Models"
     mc:Ignorable="d">
 
-    <Grid>
-
-    </Grid>
+    <GridView 
+        Margin="16" 
+        Header="Playlists" 
+        HeaderTemplate="{StaticResource StyledHeaderTemplate}"
+        ItemsSource="{x:Bind AllPlaylists}"
+        IsItemClickEnabled="True"
+        ItemClick="GridView_ItemClick">
+        <GridView.ItemTemplate>
+            <DataTemplate x:DataType="models:Playlist">
+                <controls:PlaylistItemControl Playlist="{x:Bind}"/>
+            </DataTemplate>
+        </GridView.ItemTemplate>
+    </GridView>
 </Page>
