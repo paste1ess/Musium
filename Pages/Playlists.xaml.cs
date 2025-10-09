@@ -6,6 +6,7 @@ using Microsoft.UI.Xaml.Input;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 using Musium.Models;
+using Musium.Services;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -23,6 +24,7 @@ namespace Musium.Pages
 {
     public sealed partial class Playlists : Page
     {
+        public readonly AudioService Audio = AudioService.Instance;
         public Playlists()
         {
             InitializeComponent();
@@ -43,7 +45,14 @@ namespace Musium.Pages
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
         {
+            var clickedPlaylist = e.ClickedItem as Playlist;
 
+            if (clickedPlaylist != null)
+            {
+                Audio.CurrentViewedPlaylist = clickedPlaylist;
+                Frame.Navigate(typeof(InnerPlaylist));
+                MainWindow.UpdateNavigationViewSelection(typeof(InnerPlaylist));
+            }
         }
     }
 }

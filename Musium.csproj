@@ -74,6 +74,9 @@
     <Page Update="Controls\PlaylistItemControl.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Update="Pages\InnerPlaylist.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Pages\Playlists.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>

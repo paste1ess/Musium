@@ -551,27 +551,29 @@ namespace Musium.Services
             _mediaPlayer.Position = new TimeSpan(0, 0, seconds);
         }
 
-        private static readonly List<string> audioExtensions = new List<string>
-        {
+        private static readonly List<string> audioExtensions = [
             ".mp3",
             ".m4a",
             ".ogg",
             ".opus",
-            ".wma",
+            ".wma"
+        ];
+        private static readonly List<string> losslessAudioExtensions = [
             ".flac",
             ".alac",
             ".wav",
             ".aiff",
             ".dsd"
-        };
-        private static readonly List<string> losslessAudioExtensions = new List<string>
+        ];
+        public static List<string> GetAllAudioExtensions()
         {
-            ".flac",
-            ".alac",
-            ".wav",
-            ".aiff",
-            ".dsd"
-        };
+            List<string> allExtensions = [.. audioExtensions];
+            allExtensions.AddRange(losslessAudioExtensions);
+            return allExtensions;
+        }
+        private static readonly List<string> playlistExtensions = [
+            ".xspf"    
+        ];
         public async Task<Song?> AddSongFromFile(string path)
         {
             if (!System.IO.File.Exists(path))
@@ -580,7 +582,7 @@ namespace Musium.Services
             }
 
             var extension = System.IO.Path.GetExtension(path).ToLower();
-            if (!audioExtensions.Contains(extension))
+            if (!GetAllAudioExtensions().Contains(extension))
             {
                 return null;
             }

@@ -26,7 +26,9 @@
 
             <TextBlock x:Name="PlaylistNameText" 
                Text="{x:Bind Playlist.Title, Mode=OneWay, TargetNullValue='Missing name, please report this'}"
+               HorizontalAlignment="Center"
                TextWrapping="WrapWholeWords"
+               TextAlignment="Center"
                FontWeight="Bold"/>
         </StackPanel>
     </Grid>
