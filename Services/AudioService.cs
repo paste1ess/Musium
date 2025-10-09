@@ -115,12 +115,12 @@ namespace Musium.Services
         {
             bool shuffled = CurrentShuffleState == ShuffleState.Shuffle;
             var songList = new List<Song>(inputSongList);
-            songList.Remove(startingSong);
 
             _fullCurrentSongList = inputSongList;
 
             if (shuffled) shuffleSongList(songList);
             ReplaceQueueWithList(songList);
+            songList.Remove(startingSong);
             PlaySong(startingSong);
         }
         private void shuffleSongList(List<Song> list)
@@ -723,18 +723,37 @@ namespace Musium.Services
         {
             if (_currentlyScanning) return;
             _currentlyScanning = true;
+
             Database.Clear();
+
+            var playlistsToAdd = new List<Playlist>();
+
             await Task.Run(async () =>
             {
                 await ScanDirectoryIntoLibrary(targetDirectory);
+
                 foreach (string fileName in _playlistsToAdd)
                 {
                     Playlist? playlist = null;
-                    if (Path.GetExtension(fileName).ToLower() == ".xspf") playlist = await Playlist.GetPlaylistFromXSPFFile(new(fileName));
-                    if (playlist != null) Playlists.Add(playlist);
+                    if (Path.GetExtension(fileName).ToLower() == ".xspf")
+                        playlist = await Playlist.GetPlaylistFromXSPFFile(new Uri(fileName));
+                    if (playlist != null) playlistsToAdd.Add(playlist);
                 }
-                _currentlyScanning = false;
             });
+
+            if (dispatcherQueue != null)
+            {
+                dispatcherQueue.TryEnqueue(() =>
+                {
+                    foreach (var pl in playlistsToAdd) Playlists.Add(pl);
+                    _currentlyScanning = false;
+                });
+            }
+            else
+            {
+                foreach (var pl in playlistsToAdd) Playlists.Add(pl);
+                _currentlyScanning = false;
+            }
         }
         private List<string> _playlistsToAdd = [];
         public async Task ScanDirectoryIntoLibrary(string targetDirectory)
