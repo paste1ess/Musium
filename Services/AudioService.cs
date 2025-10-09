@@ -105,10 +105,11 @@ namespace Musium.Services
             _mediaPlayer.MediaEnded += OnMediaEnded;
         }
 
-        private List<Artist> Database = new List<Artist>();
-        public ObservableCollection<Song> Queue = new ObservableCollection<Song>();
-        private List<Song> _fullCurrentSongList = new List<Song>();
-        public List<Song> History = new List<Song>();
+        private List<Artist> Database = [];
+        public ObservableCollection<Playlist> Playlists = [];
+        public ObservableCollection<Song> Queue = [];
+        private List<Song> _fullCurrentSongList = [];
+        public List<Song> History = [];
 
         public void PlaySongList(List<Song> inputSongList, Song startingSong)
         {
@@ -640,6 +641,11 @@ namespace Musium.Services
             return album;
         }
 
+        private Playlist ExtractPlaylistData(Uri path)
+        {
+            return null;
+        }
+
         private Song ExtractSongData(TagLib.File tfile, Uri path, Album album)
         {
             var song = new Song
@@ -723,13 +729,17 @@ namespace Musium.Services
                 _currentlyScanning = false;
             });
         }
-
+        private List<string> _playlistsToAdd = [];
         public async Task ScanDirectoryIntoLibrary(string targetDirectory)
         {
             if (!Directory.Exists(targetDirectory)) return;
             string[] fileEntries = Directory.GetFiles(targetDirectory);
             foreach (string fileName in fileEntries)
-                await AddSongFromFile(fileName);
+                if (playlistExtensions.Contains(Path.GetExtension(fileName)))
+                {
+                    _playlistsToAdd.Add(fileName);
+                } else await AddSongFromFile(fileName);
+            
 
             string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
             foreach (string subdirectory in subdirectoryEntries)

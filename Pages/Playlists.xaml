@@ -14,7 +14,7 @@
         Margin="16" 
         Header="Playlists" 
         HeaderTemplate="{StaticResource StyledHeaderTemplate}"
-        ItemsSource="{x:Bind AllPlaylists}"
+        ItemsSource="{x:Bind Audio.Playlists}"
         IsItemClickEnabled="True"
         ItemClick="GridView_ItemClick">
         <GridView.ItemTemplate>

@@ -30,8 +30,6 @@ namespace Musium.Pages
             InitializeComponent();
             Loaded += OnLoaded;
         }
-
-        public ObservableCollection<Playlist> AllPlaylists = new();
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
             var playlist = await Playlist.GetPlaylistFromXSPFFile(new("file://C:\\Users\\jamied\\Documents\\testPlaylist.xspf"));
@@ -40,7 +38,7 @@ namespace Musium.Pages
             {
                 Debug.WriteLine(song.FilePath);
             }
-            AllPlaylists.Add(playlist);
+            Audio.Playlists.Add(playlist);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)

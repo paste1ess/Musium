@@ -44,7 +44,7 @@ namespace Musium
             var Audio = AudioService.Instance;
             await Task.Run(async () =>
             {
-                await Audio.ScanDirectoryIntoLibrary(SettingsService.Instance.LibraryPath);
+                Audio.SetLibrary(SettingsService.Instance.LibraryPath);
             });
         }
     }
