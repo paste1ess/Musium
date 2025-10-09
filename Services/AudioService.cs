@@ -573,7 +573,8 @@ namespace Musium.Services
             return allExtensions;
         }
         private static readonly List<string> playlistExtensions = [
-            ".xspf"    
+            ".xspf",
+            //".m3u" // eventually
         ];
         public async Task<Song?> AddSongFromFile(string path)
         {
@@ -726,6 +727,12 @@ namespace Musium.Services
             await Task.Run(async () =>
             {
                 await ScanDirectoryIntoLibrary(targetDirectory);
+                foreach (string fileName in _playlistsToAdd)
+                {
+                    Playlist? playlist = null;
+                    if (Path.GetExtension(fileName).ToLower() == ".xspf") playlist = await Playlist.GetPlaylistFromXSPFFile(new(fileName));
+                    if (playlist != null) Playlists.Add(playlist);
+                }
                 _currentlyScanning = false;
             });
         }
@@ -735,11 +742,7 @@ namespace Musium.Services
             if (!Directory.Exists(targetDirectory)) return;
             string[] fileEntries = Directory.GetFiles(targetDirectory);
             foreach (string fileName in fileEntries)
-                if (playlistExtensions.Contains(Path.GetExtension(fileName)))
-                {
-                    _playlistsToAdd.Add(fileName);
-                } else await AddSongFromFile(fileName);
-            
+                if (playlistExtensions.Contains(Path.GetExtension(fileName))) _playlistsToAdd.Add(fileName); else await AddSongFromFile(fileName);
 
             string[] subdirectoryEntries = Directory.GetDirectories(targetDirectory);
             foreach (string subdirectory in subdirectoryEntries)
@@ -749,6 +752,12 @@ namespace Musium.Services
         public void PlayAlbum(Song startingSong)
         {
             PlaySongList([.. startingSong.Album.Songs], startingSong);
+            if (CurrentShuffleState == ShuffleState.Shuffle) return;
+            ReplaceQueueWithCurrentUnshuffled();
+        }
+        public void PlayPlaylist(Song startingSong, Playlist playlist)
+        {
+            PlaySongList([.. playlist.Songs], startingSong);
             if (CurrentShuffleState == ShuffleState.Shuffle) return;
             ReplaceQueueWithCurrentUnshuffled();
         }

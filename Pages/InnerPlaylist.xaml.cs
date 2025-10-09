@@ -76,7 +76,8 @@ namespace Musium.Pages
             var clickedControl = sender as TrackItemControl;
             if (clickedControl != null)
             {
-                Audio.PlayAlbum(clickedControl.Song);
+                if (Audio.CurrentViewedPlaylist == null) return;
+                Audio.PlayPlaylist(clickedControl.Song, Audio.CurrentViewedPlaylist);
                 Frame.Navigate(typeof(NowPlaying));
                 MainWindow.UpdateNavigationViewSelection(typeof(NowPlaying));
             }
@@ -89,7 +90,7 @@ namespace Musium.Pages
             var firstSong = Audio.CurrentViewedPlaylist.Songs.FirstOrDefault();
             if (firstSong == null)
                 return;
-            Audio.PlayAlbum(firstSong);
+            Audio.PlayPlaylist(firstSong, Audio.CurrentViewedPlaylist);
             Audio.SetShuffle(ShuffleState.Off);
             Frame.Navigate(typeof(NowPlaying));
             MainWindow.UpdateNavigationViewSelection(typeof(NowPlaying));
@@ -105,7 +106,7 @@ namespace Musium.Pages
             var firstSong = songs.ElementAtOrDefault(randomIndex);
             if (firstSong == null) return;
 
-            Audio.PlayAlbum(firstSong);
+            Audio.PlayPlaylist(firstSong, Audio.CurrentViewedPlaylist);
             Audio.SetShuffle(ShuffleState.Shuffle);
             Frame.Navigate(typeof(NowPlaying));
             MainWindow.UpdateNavigationViewSelection(typeof(NowPlaying));

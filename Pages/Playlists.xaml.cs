@@ -32,13 +32,6 @@ namespace Musium.Pages
         }
         private async void OnLoaded(object sender, RoutedEventArgs e)
         {
-            var playlist = await Playlist.GetPlaylistFromXSPFFile(new("file://C:\\Users\\jamied\\Documents\\testPlaylist.xspf"));
-            if (playlist == null) return;
-            foreach (Song song in playlist.Songs)
-            {
-                Debug.WriteLine(song.FilePath);
-            }
-            Audio.Playlists.Add(playlist);
         }
 
         private void GridView_ItemClick(object sender, ItemClickEventArgs e)
