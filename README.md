@@ -17,7 +17,7 @@ go to releases, download the .msix for your cpu and install it
 ## build instructions
 heads up, if you are planning on contributing, the dev branch is where things can change and PRs can be made. the main branch is reserved for stable builds only
 
-- step 1: you need Visual Studio 2026 to build. currently there is an insiders build available for it, use that.
+- step 1: you need Visual Studio 2026 to build. make sure to install that, as older Visual Studio versions are not guarenteed to work and could break the project.
 - step 2: open up the project, and right click it in the Solution Explorer.
 - step 3: go to Package and Publish > Create App Packages
 - step 4: choose Sideloading, make sure Enable automatic updates is **disabled**.
