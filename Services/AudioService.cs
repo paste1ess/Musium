@@ -182,8 +182,8 @@ namespace Musium.Services
             _fullCurrentSongList = inputSongList;
 
             if (shuffled) shuffleSongList(songList);
-            ReplaceQueueWithList(songList);
             songList.Remove(startingSong);
+            ReplaceQueueWithList(songList);
             PlaySong(startingSong);
         }
         private void shuffleSongList(List<Song> list)
@@ -212,7 +212,7 @@ namespace Musium.Services
 
         public void SetShuffle(ShuffleState newState)
         {
-            CurrentShuffleState = newState;
+            CurrentShuffleState = newState; 
             ShuffleLogic();
         }
         private void ReplaceQueueWithCurrentUnshuffled()
@@ -226,6 +226,7 @@ namespace Musium.Services
             {
                 int count = _fullCurrentSongList.Count - startIndex;
                 ReplaceQueueWithList(_fullCurrentSongList.GetRange(startIndex, count));
+                if (CurrentSongPlaying != null) Queue.Remove(CurrentSongPlaying);
             }
         }
 

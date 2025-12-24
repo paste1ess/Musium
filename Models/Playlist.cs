@@ -80,8 +80,21 @@ namespace Musium.Models
                 if (trackElem.Element(ns + "location") is XElement locationElem)
                 {
                     string location = locationElem.Value;
-                    var song = await Audio.GetSongFromPathAsync(new(location));
-                    if (song != null) playlist.Songs.Add(song);
+
+                    try
+                    {
+                        Uri baseUri = new Uri(Path.GetDirectoryName(uri.LocalPath) + Path.DirectorySeparatorChar);
+                        Uri finalUri = new Uri(baseUri, location);
+
+                        Debug.WriteLine(finalUri.LocalPath);
+
+                        var song = await Audio.GetSongFromPathAsync(finalUri);
+                        if (song != null) playlist.Songs.Add(song);
+                    }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e.Message);
+                    }
                 }
             }
 
