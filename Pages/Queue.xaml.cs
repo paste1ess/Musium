@@ -22,7 +22,7 @@ namespace Musium.Pages
     
     public sealed partial class Queue : Page
     {
-        public readonly AudioService Audio = AudioService.Instance;
+        private readonly QueueManagerService _queue = QueueManagerService.Instance;
         public Queue()
         {
             InitializeComponent();

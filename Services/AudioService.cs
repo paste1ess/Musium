@@ -220,6 +220,7 @@ namespace Musium.Services
             else
             {
                 QueueManagerService.Instance.ReplaceQueueWithUnshuffledList(songList, CurrentSongPlaying);
+                QueueManagerService.Instance.RemoveFromQueue(CurrentSongPlaying);
             }
         }
 

@@ -32,8 +32,6 @@ public sealed partial class TrackItemControl : UserControl, INotifyPropertyChang
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    public readonly AudioService Audio = AudioService.Instance;
-
     private BitmapImage? _displayedCoverArt;
     public BitmapImage? DisplayedCoverArt
     {
@@ -103,11 +101,11 @@ public sealed partial class TrackItemControl : UserControl, INotifyPropertyChang
 
     private void NextQueue_Click(object sender, RoutedEventArgs e)
     {
-        Audio.InsertStartOfQueue(Song);
+        QueueManagerService.Instance.InsertStartOfQueue(Song);
     }
     private void LastQueue_Click(object sender, RoutedEventArgs e)
     {
-        Audio.InsertEndOfQueue(Song);
+        QueueManagerService.Instance.InsertEndOfQueue(Song);
     }
 
     private void MenuFlyoutItemFav_Click(object sender, RoutedEventArgs e)

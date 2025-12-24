@@ -12,7 +12,9 @@ namespace Musium.Services
 {
     internal class QueueManagerService : ObservableObject
     {
-        public static readonly QueueManagerService Instance = new QueueManagerService();
+        private static readonly Lazy<QueueManagerService> _instance = new Lazy<QueueManagerService>(() => new QueueManagerService());
+        public static QueueManagerService Instance => _instance.Value;
+        private QueueManagerService() { }
 
         public ObservableCollection<Song> Queue = [];
         public List<Song> History = [];

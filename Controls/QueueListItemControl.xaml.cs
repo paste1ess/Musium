@@ -98,6 +98,6 @@ public sealed partial class QueueListItemControl : UserControl, INotifyPropertyC
 
     private void RemoveQueue_Click(object sender, RoutedEventArgs e)
     {
-        Audio.RemoveFromQueue(Song);
+        QueueManagerService.Instance.RemoveFromQueue(Song);
     }
 }

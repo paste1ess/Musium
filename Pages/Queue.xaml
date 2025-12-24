@@ -12,7 +12,7 @@
 
     <Grid>
         <ListView
-            ItemsSource="{x:Bind Audio.Queue}"
+            ItemsSource="{x:Bind _queue.Queue}"
             Padding="8"
             IsItemClickEnabled="True"
             CanReorderItems="True"
