@@ -63,6 +63,8 @@ namespace Musium.Services
         private readonly Random _rng = new Random();
         public DiscordRpcClient DiscordClient;
 
+        public bool RPCEnabled = true;
+
         private RepeatState _currentRepeatState = RepeatState.Off;
         public RepeatState CurrentRepeatState
         {
@@ -116,7 +118,6 @@ namespace Musium.Services
             {
                 Debug.WriteLine("Connected to discord with user {0}", e.User.Username);
                 Debug.WriteLine("Avatar: {0}", e.User.GetAvatarURL(User.AvatarFormat.WebP));
-                Debug.WriteLine("Decoration: {0}", e.User.GetAvatarDecorationURL());
             };
 
             DiscordClient.Initialize();
@@ -130,22 +131,38 @@ namespace Musium.Services
 
         public void SetDiscordRPC()
         {
+            if (!RPCEnabled)
+            {
+                DiscordClient.ClearPresence();
+                return;
+            }
             if (CurrentSongPlaying == null)
             {
                 DiscordClient.ClearPresence();
             } else
             {
-                var ts = new Timestamps{ 
+                var ts = new Timestamps() 
+                { 
                     Start = DateTime.UtcNow.AddSeconds(-_mediaPlayer.Position.TotalSeconds), 
                     End = DateTime.UtcNow.AddSeconds(CurrentSongPlaying.Duration.TotalSeconds - _mediaPlayer.Position.TotalSeconds) 
                 };
+                //var a = new Assets()
+                //{
+                //    LargeImageKey = "logo",
+                //    LargeImageText = "",
+                //    LargeImageUrl = "",
+                //    SmallImageKey = "0",
+                //    SmallImageText = "0",
+                //    SmallImageUrl = "0"
+                //};
                 DiscordClient.SetPresence(new RichPresence()
                 {
                     Details = CurrentSongPlaying.Title,
                     State = CurrentSongPlaying.ArtistName,
                     Timestamps = ts,
                     StatusDisplay = StatusDisplayType.State,
-                    Type = ActivityType.Listening
+                    Type = ActivityType.Listening,
+                    //Assets = a // for some goddamn reason the library hates me and will NOT let me have no SmallImage. so for now i just wont have it
                 });
             }
         }
