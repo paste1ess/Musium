@@ -181,7 +181,7 @@ namespace Musium.Services
 
             if (shuffled) shuffleSongList(songList);
             songList.Remove(startingSong);
-            ReplaceQueueWithList(songList);
+            QueueManagerService.Instance.ReplaceQueueWithList(songList);
             PlaySong(startingSong);
         }
         private void shuffleSongList(List<Song> list)
@@ -215,11 +215,11 @@ namespace Musium.Services
             {
                 shuffleSongList(songList);
                 songList.Remove(CurrentSongPlaying);
-                ReplaceQueueWithList(songList);
+                QueueManagerService.Instance.ReplaceQueueWithList(songList);
             }
             else
             {
-                ReplaceQueueWithCurrentUnshuffled();
+                QueueManagerService.Instance.ReplaceQueueWithUnshuffledList(songList, CurrentSongPlaying);
             }
         }
 
@@ -376,7 +376,7 @@ namespace Musium.Services
                 return;
             }
 
-            var songToPlay = Queue.FirstOrDefault();
+            var songToPlay = QueueManagerService.Instance.FirstInQueue();
             if (songToPlay != null) // there is a song to play next
             {
                 PlaySong(songToPlay);
@@ -385,13 +385,13 @@ namespace Musium.Services
                 {
                     if (currentSong != null)
                     {
-                        History.Add(currentSong);
-                        if (History.Count > 100) // capped history at 100, dunno if people actually use it past 100 songs so make PR/issue if u do
+                        QueueManagerService.Instance.InsertEndOfHistory(currentSong);
+                        if (QueueManagerService.Instance.History.Count > 100) // capped history at 100, dunno if people actually use it past 100 songs so make PR/issue if u do
                         {
-                            History.RemoveAt(0);
+                            QueueManagerService.Instance.RemoveFirstInHistory();
                         }
                     }
-                    Queue.Remove(songToPlay);
+                    QueueManagerService.Instance.RemoveFromQueue(songToPlay);
                 });
             }
             else if (CurrentRepeatState == RepeatState.Repeat) // there is no song to play next and repeat is enabled
@@ -400,20 +400,20 @@ namespace Musium.Services
                 {
                     var list = _fullCurrentSongList;
                     if (CurrentShuffleState == ShuffleState.Shuffle) shuffleSongList(list);
-                    ReplaceQueueWithList(list);
+                    QueueManagerService.Instance.ReplaceQueueWithList(list);
 
-                    var firstSongInNewQueue = Queue.FirstOrDefault();
+                    var firstSongInNewQueue = QueueManagerService.Instance.FirstInQueue();
                     if (firstSongInNewQueue != null)
                     {
                         PlaySong(firstSongInNewQueue);
-                        Queue.Remove(firstSongInNewQueue);
+                        QueueManagerService.Instance.RemoveFromQueue(firstSongInNewQueue);
                     }
                 });
             }
         }
         public void PreviousSong()
         {
-            if (_mediaPlayer.PlaybackSession.Position.TotalMilliseconds > 3000 || History.Count <= 0) // rewind goes to previous song if done in under 3 seconds
+            if (_mediaPlayer.PlaybackSession.Position.TotalMilliseconds > 3000 || QueueManagerService.Instance.History.Count <= 0) // rewind goes to previous song if done in under 3 seconds
             {
                 ScrubTo(0);
                 return;
@@ -421,17 +421,17 @@ namespace Musium.Services
 
             var currentSong = CurrentSongPlaying;
 
-            var songToPlay = History.LastOrDefault();
+            var songToPlay = QueueManagerService.Instance.LastInHistory();
             if (songToPlay != null)
             {
                 PlaySong(songToPlay);
 
                 dispatcherQueue.TryEnqueue(() =>
                 {
-                    History.Remove(songToPlay);
+                    QueueManagerService.Instance.RemoveFromHistory(songToPlay);
                     if (currentSong != null)
                     {
-                        Queue.Insert(0, currentSong);
+                        QueueManagerService.Instance.InsertStartOfQueue(currentSong);
                     }
                 });
             }
@@ -819,13 +819,13 @@ namespace Musium.Services
         {
             PlaySongList([.. startingSong.Album.Songs], startingSong);
             if (CurrentShuffleState == ShuffleState.Shuffle) return;
-            ReplaceQueueWithCurrentUnshuffled();
+            QueueManagerService.Instance.ReplaceQueueWithUnshuffledList(_fullCurrentSongList, CurrentSongPlaying);
         }
         public void PlayPlaylist(Song startingSong, Playlist playlist)
         {
             PlaySongList([.. playlist.Songs], startingSong);
             if (CurrentShuffleState == ShuffleState.Shuffle) return;
-            ReplaceQueueWithCurrentUnshuffled();
+            QueueManagerService.Instance.ReplaceQueueWithUnshuffledList(_fullCurrentSongList, CurrentSongPlaying);
         }
 
         public async Task PlayTrackAsync(Song startingSong, bool favoritesOnly = false)
@@ -837,7 +837,7 @@ namespace Musium.Services
             }
             PlaySongList(tracks, startingSong);
             if (CurrentShuffleState == ShuffleState.Shuffle) return;
-            ReplaceQueueWithCurrentUnshuffled();
+            QueueManagerService.Instance.ReplaceQueueWithUnshuffledList(_fullCurrentSongList, CurrentSongPlaying);
         }
 
         // Image magic below
