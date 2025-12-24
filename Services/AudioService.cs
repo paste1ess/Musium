@@ -170,9 +170,7 @@ namespace Musium.Services
 
         private List<Artist> Database = [];
         public ObservableCollection<Playlist> Playlists = [];
-        public ObservableCollection<Song> Queue = [];
         private List<Song> _fullCurrentSongList = [];
-        public List<Song> History = [];
 
         public void PlaySongList(List<Song> inputSongList, Song startingSong)
         {
@@ -196,14 +194,7 @@ namespace Musium.Services
                 list[k] = temp;
             }
         }
-        private void ReplaceQueueWithList(List<Song> list)
-        {
-            Queue.Clear();
-            foreach (Song song in list)
-            {
-                Queue.Add(song);
-            }
-        }
+        
         public void ToggleShuffle()
         {
             CurrentShuffleState = CurrentShuffleState == ShuffleState.Off ? ShuffleState.Shuffle : ShuffleState.Off;
@@ -215,20 +206,7 @@ namespace Musium.Services
             CurrentShuffleState = newState; 
             ShuffleLogic();
         }
-        private void ReplaceQueueWithCurrentUnshuffled()
-        {
-            int index = _fullCurrentSongList.FindIndex(s => s == CurrentSongPlaying);
-
-            if (index == -1) return;
-
-            int startIndex = index + 1;
-            if (startIndex <= _fullCurrentSongList.Count)
-            {
-                int count = _fullCurrentSongList.Count - startIndex;
-                ReplaceQueueWithList(_fullCurrentSongList.GetRange(startIndex, count));
-                if (CurrentSongPlaying != null) Queue.Remove(CurrentSongPlaying);
-            }
-        }
+        
 
         private void ShuffleLogic()
         {
@@ -862,18 +840,7 @@ namespace Musium.Services
             ReplaceQueueWithCurrentUnshuffled();
         }
 
-        public void InsertStartOfQueue(Song song)
-        {
-            Queue.Insert(0, song);
-        }
-        public void InsertEndOfQueue(Song song)
-        {
-            Queue.Add(song);
-        }
-        public void RemoveFromQueue(Song song)
-        {
-            Queue.Remove(song);
-        }
+        // Image magic below
         public static async Task<byte[]> ResizeImageAsync(byte[] imageData, uint newWidth)
         {
             var inputStream = new InMemoryRandomAccessStream();
