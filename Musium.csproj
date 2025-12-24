@@ -11,6 +11,7 @@
     <EnableMsixTooling>true</EnableMsixTooling>
     <Nullable>enable</Nullable>
 	<ApplicationManifest>app.manifest</ApplicationManifest>
+    <UserSecretsId>7978d859-28f5-41a8-819a-9b5f73b0ca06</UserSecretsId>
   </PropertyGroup>
   <ItemGroup>
     <Content Remove="Assets\Icon.png" />

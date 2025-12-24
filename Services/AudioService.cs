@@ -1,4 +1,6 @@
-﻿using Microsoft.UI.Dispatching;
+﻿using ABI.Microsoft.UI.Xaml;
+using DiscordRPC;
+using Microsoft.UI.Dispatching;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media.Imaging;
 using Microsoft.VisualBasic;
@@ -20,8 +22,10 @@ using Windows.Graphics.Imaging;
 using Windows.Media;
 using Windows.Media.Core;
 using Windows.Media.Playback;
+using Windows.Media.Protection.PlayReady;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using Windows.UI.WebUI;
 
 namespace Musium.Services
 {
@@ -45,8 +49,9 @@ namespace Musium.Services
         float? duration = null,
         bool? instrumental = null,
         string? plainLyrics = null,
-        string? syncedLyrics = null);
-    public class AudioService : INotifyPropertyChanged
+        string? syncedLyrics = null
+    );
+    public class AudioService : INotifyPropertyChanged, IDisposable
     {
         public event PropertyChangedEventHandler PropertyChanged;
         private DispatcherQueue dispatcherQueue;
@@ -56,6 +61,7 @@ namespace Musium.Services
         private SystemMediaTransportControls _systemMediaTransportControls;
 
         private readonly Random _rng = new Random();
+        public DiscordRpcClient DiscordClient;
 
         private RepeatState _currentRepeatState = RepeatState.Off;
         public RepeatState CurrentRepeatState
@@ -103,7 +109,47 @@ namespace Musium.Services
             _mediaPlayer.PlaybackSession.PositionChanged += OnPlaybackSessionChanged;
             _mediaPlayer.CurrentStateChanged += OnCurrentStateChanged;
             _mediaPlayer.MediaEnded += OnMediaEnded;
+
+            DiscordClient = new DiscordRpcClient("1453167190663495722"); // hard coded :( will "probably" change in the future
+
+            DiscordClient.OnReady += (sender, e) =>
+            {
+                Debug.WriteLine("Connected to discord with user {0}", e.User.Username);
+                Debug.WriteLine("Avatar: {0}", e.User.GetAvatarURL(User.AvatarFormat.WebP));
+                Debug.WriteLine("Decoration: {0}", e.User.GetAvatarDecorationURL());
+            };
+
+            DiscordClient.Initialize();
+
+            SetDiscordRPC();
         }
+        public void Dispose()
+        {
+            DiscordClient.Dispose();
+        }
+
+        public void SetDiscordRPC()
+        {
+            if (CurrentSongPlaying == null)
+            {
+                DiscordClient.ClearPresence();
+            } else
+            {
+                var ts = new Timestamps{ 
+                    Start = DateTime.UtcNow.AddSeconds(-_mediaPlayer.Position.TotalSeconds), 
+                    End = DateTime.UtcNow.AddSeconds(CurrentSongPlaying.Duration.TotalSeconds - _mediaPlayer.Position.TotalSeconds) 
+                };
+                DiscordClient.SetPresence(new RichPresence()
+                {
+                    Details = CurrentSongPlaying.Title,
+                    State = CurrentSongPlaying.ArtistName,
+                    Timestamps = ts,
+                    StatusDisplay = StatusDisplayType.State,
+                    Type = ActivityType.Listening
+                });
+            }
+        }
+                
 
         private List<Artist> Database = [];
         public ObservableCollection<Playlist> Playlists = [];
@@ -267,6 +313,7 @@ namespace Musium.Services
         {
             PositionChanged?.Invoke(this, sender.Position);
             UpdateSystemTimeline();
+            SetDiscordRPC();
         }
         private void OnCurrentStateChanged(MediaPlayer sender, object args)
         {
@@ -292,6 +339,7 @@ namespace Musium.Services
                     break;
             }
             UpdateSystemTimeline();
+            SetDiscordRPC();
         }
         private void OnMediaEnded(MediaPlayer sender, object args)
         {
@@ -528,6 +576,7 @@ namespace Musium.Services
             updater.Type = MediaPlaybackType.Music;
             updater.MusicProperties.Title = song.Title;
             updater.MusicProperties.Artist = song.ArtistName;
+
             using (var memoryStream = new MemoryStream(song.Album.CoverArtData ?? []))
             {
                 var randomAccessStream = new InMemoryRandomAccessStream();
@@ -541,6 +590,8 @@ namespace Musium.Services
                 updater.Thumbnail = RandomAccessStreamReference.CreateFromStream(randomAccessStream);
             }
             updater.Update();
+
+            SetDiscordRPC();
 
             _mediaPlayer.Source = playbackItem;
             _mediaPlayer.Play();

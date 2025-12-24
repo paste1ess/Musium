@@ -55,6 +55,7 @@ namespace Musium
         private void MainWindow_Closed(object sender, WindowEventArgs args)
         {
             Audio.PropertyChanged -= Audio_PropertyChanged;
+            AudioService.Instance.Dispose();
         }
 
         private void Audio_PropertyChanged(object sender, PropertyChangedEventArgs e)
