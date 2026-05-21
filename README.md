@@ -1,3 +1,7 @@
+# READ THIS FIRST!
+
+this is no longer supported or updated! check out moonrise whenever it's available in the same organization as this, as it's the direct successor to this!
+
 # Musium
 <img width="200" height="200" alt="logo" src="https://github.com/user-attachments/assets/cbd70dc1-2618-4517-9700-d4283dc7a622" />
 
