@@ -7,6 +7,10 @@ this is no longer supported or updated! check out moonrise whenever it's availab
 
 a native WinUI 3 music player made in C#
 
+<a href="https://get.microsoft.com/installer/download/9MTTCKDB4D74?referrer=appbadge" target="_self" >
+	<img src="https://get.microsoft.com/images/en-us%20light.svg" width="200"/>
+</a>
+
 <img width="1079" height="653" alt="{2082FA87-9E80-431C-AB4F-7EF18FE6CA30}" src="https://github.com/user-attachments/assets/8d9d57f4-30aa-4464-b94d-5317aba3e420" />
 <img width="1079" height="653" alt="{948954F5-E65D-414E-AD63-C072C50EBBAA}" src="https://github.com/user-attachments/assets/a2e1bcfc-4d13-47b4-ab83-fb421ac849d9" />
 <img width="1079" height="653" alt="{9254E485-7A20-438B-95FB-BE2482C7C179}" src="https://github.com/user-attachments/assets/222c9609-e6d6-4316-89ac-bf650b214140" />
